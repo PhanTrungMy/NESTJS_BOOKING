@@ -8,6 +8,8 @@ import { DatabaseService } from "src/database/database.service";
      imports: [DatabaseModule],
     controllers: [UserController],
     providers: [UserService,DatabaseService],
+    // export usemodule ready from authmodul
+    exports:[UserModule]
 
 })
 
