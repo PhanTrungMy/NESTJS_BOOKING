@@ -3,9 +3,12 @@ import { UserService } from "./user.service";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { ApiBadRequestResponse, ApiCreatedResponse, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { UpdateUserDto } from "./dto/update-user.dto";
+import { UserReq } from "src/common/decorator/user.decorator";
+import { User } from "@prisma/client";
+
 
 // decorator:class,method,property,parameter
-// @ApiBearerAuth() khoas 
+// @ApiBearerAuth() khoa
 // todo: exclude password from response
 
 @ApiTags('user')
@@ -27,9 +30,21 @@ import { UpdateUserDto } from "./dto/update-user.dto";
         console.log(data);
         return this.userService.create(data);
     }
-    @Patch('/users/:userId')
+    
+    // @UseGuards(AuthGuard)
+    @Get('/users/me')
+    // import decorator UserReq
+    GetMe(@UserReq() user :User){
+     return user;
+    }
+    // todo : implement api update password
+    @Patch('/users/me')
     updateUserInfo( @Body() data: UpdateUserDto){
         return this.userService.update(data);
     }
+    // const userId = ..
+    // update userInfo of the UserId
 
  }
+
+

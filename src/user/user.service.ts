@@ -39,5 +39,17 @@ export class UserService {
     const hashedPassword = await bcrypt.hash(password, salt);
     return hashedPassword;
   }
-  
+   comparePassword (password: string, hashedPassword: string){
+    return  bcrypt.compare(password, hashedPassword);
+  }
+
+  async findOneOrFailByEmail(email:string){
+   const user = await this.databaseService.user.findUnique({
+    where: {email}
+   });
+   if( !user) {
+    throw new Error ('User not found');
+   }
+   return user;
+  }
 }
