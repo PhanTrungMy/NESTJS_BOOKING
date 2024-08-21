@@ -9,7 +9,7 @@ import { DatabaseService } from "src/database/database.service";
     controllers: [UserController],
     providers: [UserService,DatabaseService],
     // export usemodule ready from authmodul
-    exports:[UserModule]
+    exports:[UserModule,UserService]
 
 })
 
