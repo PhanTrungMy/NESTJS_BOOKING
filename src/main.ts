@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { BadRequestException, ValidationPipe } from '@nestjs/common';
 import { ValidationError } from 'class-validator';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { config } from './config' 
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -30,6 +31,12 @@ async function bootstrap() {
     transform: true,
   }),
   );
-  await app.listen(3000);
+  // cau hinh port 
+  const appPort = process.env.APP_PORT || 3000;
+  await app.listen(appPort);
+  console.table({
+    port: appPort,
+    name: 'Booking API'
+  });
 }
 bootstrap();
