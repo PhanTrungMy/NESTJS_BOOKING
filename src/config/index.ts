@@ -1,4 +1,3 @@
-
 // validation environment variables
 // export environment variables
 
@@ -11,10 +10,12 @@ export class EnvironmentVariables {
 
   @IsOptional()
   APP_PORT?: number;
+  @IsNotEmpty()
+  APP_KEY?: string;
 
   @IsNotEmpty()
   DATABASE_HOST: string;
-  
+
   @IsNotEmpty()
   DATABASE_PORT: number;
 
@@ -27,23 +28,25 @@ export class EnvironmentVariables {
   @IsNotEmpty()
   DATABASE_NAME: string;
 }
-export function validate(config : Record<string, unknown>)  {
-
-  const validatedConfig = plainToInstance(EnvironmentVariables, config, { enableImplicitConversion: true });
-  const errors = validateSync(validatedConfig, { skipMissingProperties: false });
- if(errors.length > 0) {
-   throw new Error(errors.toString());
- }
+export function validate(config: Record<string, unknown>) {
+  const validatedConfig = plainToInstance(EnvironmentVariables, config, {
+    enableImplicitConversion: true,
+  });
+  const errors = validateSync(validatedConfig, {
+    skipMissingProperties: false,
+  });
+  if (errors.length > 0) {
+    throw new Error(errors.toString());
+  }
   return validatedConfig;
-  
-};
+}
 export const config = {
-  APP_NAME: process.env.APP_NAME  || `Booking App`,
+  APP_NAME: process.env.APP_NAME || `Booking App`,
   APP_PORT: +process.env.APP_PORT || 3000,
+  APP_KEY: process.env.APP_KEY,
   DATABASE_HOST: process.env.DATABASE_HOST,
   DATABASE_PORT: +process.env.DATABASE_PORT,
   DATABASE_USERNAME: process.env.DATABASE_USERNAME,
   DATABASE_PASSWORD: process.env.DATABASE_PASSWORD,
   DATABASE_NAME: process.env.DATABASE_NAME,
-
 };
