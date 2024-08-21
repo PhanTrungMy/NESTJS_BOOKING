@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { UserModule } from './user/user.module';
 import { SessionTemplateModule } from './domain/session-template/session-template.module';
 import { AuthModule } from './domain/auth/auth.module';
@@ -7,6 +7,9 @@ import { AuthGuard } from './domain/guard/auth.guard';
 import { DatabaseModule } from './database/database.module';
 import { ConfigModule } from '@nestjs/config';
 import { validate } from './config';
+import { LoggerMiddleware } from './middleware/logger.middleware';
+import { HealthModule } from './health/heath.module';
+
 
 @Module({
   imports: [
@@ -14,6 +17,7 @@ import { validate } from './config';
     ConfigModule.forRoot({
       validate,
     }),
+    HealthModule,
     DatabaseModule,
      UserModule, 
      SessionTemplateModule,
@@ -26,4 +30,16 @@ import { validate } from './config';
     },
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule{
+ configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(LoggerMiddleware)
+      .forRoutes('*');
+
+      // note: exclude health endpoint from authentication to for AppGuard
+      // consumer
+      // .apply(AuthenticationMiddleware)
+      // .exclude({path: 'health', method: RequestMethod.GET})
+      // .forRoutes('*');
+ }
+}
