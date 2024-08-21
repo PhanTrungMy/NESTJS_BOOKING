@@ -33,7 +33,7 @@ export class UserController {
   @Post('/register')
   create(@Body() data: CreateUserDto) {
     console.log(data);
-    return this.userService.create(data);
+    return this.userService.createWithHash(data);
   }
 
   // @UseGuards(AuthGuard)
